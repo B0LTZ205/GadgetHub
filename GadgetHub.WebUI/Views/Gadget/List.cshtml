@@ -1,34 +1,181 @@
 ﻿@using GadgetHub.Domain.Entities;
-@model IEnumerable<Gadgets>
-
-
+@model IEnumerable<Gadget>
 @{
     ViewBag.Title = "List";
 }
 
+<style>
+    @@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400&display=swap');
 
-<h2>Gadget Catalog</h2>
+    :root {
+        --bg: #0d0d0f;
+        --surface: #16161a;
+        --border: #2a2a30;
+        --accent: #c8f135;
+        --accent-dim: rgba(200, 241, 53, 0.08);
+        --text-primary: #f0f0ee;
+        --text-muted: #6b6b78;
+        --text-price: #c8f135;
+    }
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Brand</th>
-            <th>Category</th>
-            <th style="text-align:right;">Price</th>
-            <th>Description</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var g in Model)
-        {
-            <tr>
-                <td>@g.Name</td>
-                <td>@g.Brand</td>
-                <td>@g.Category</td>
-                <td style="text-align:right;">@g.Price.ToString("c")</td>
-                <td>@g.Description</td>
-            </tr>
+    .gadget-catalog-wrapper {
+        font-family: 'Syne', sans-serif;
+        background: var(--bg);
+        min-height: 100vh;
+        padding: 3rem 2rem;
+    }
+
+    .catalog-header {
+        display: flex;
+        align-items: baseline;
+        gap: 1rem;
+        margin-bottom: 2.5rem;
+    }
+
+        .catalog-header h2 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: -0.03em;
+            margin: 0;
+            line-height: 1;
         }
-    </tbody>
-</table>
+
+        .catalog-header .item-count {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 300;
+            color: var(--text-muted);
+            letter-spacing: 0.08em;
+            border: 1px solid var(--border);
+            padding: 0.2rem 0.6rem;
+            border-radius: 2rem;
+        }
+
+    .gadget-table-container {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+    }
+
+    .gadget-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .gadget-table thead tr {
+            border-bottom: 1px solid var(--border);
+            background: rgba(255,255,255,0.02);
+        }
+
+        .gadget-table thead th {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.65rem;
+            font-weight: 400;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            padding: 1rem 1.4rem;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+            .gadget-table thead th.col-price {
+                text-align: right;
+            }
+
+        .gadget-table tbody tr {
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            transition: background 0.15s ease;
+        }
+
+            .gadget-table tbody tr:last-child {
+                border-bottom: none;
+            }
+
+            .gadget-table tbody tr:hover {
+                background: var(--accent-dim);
+            }
+
+        .gadget-table tbody td {
+            padding: 1.1rem 1.4rem;
+            color: var(--text-primary);
+            font-size: 0.92rem;
+            vertical-align: middle;
+        }
+
+    .td-name {
+        font-weight: 700;
+        font-size: 0.95rem;
+        letter-spacing: -0.01em;
+    }
+
+    .td-brand {
+        font-size: 0.85rem;
+        color: #a0a0b0;
+    }
+
+    .td-category span {
+        display: inline-block;
+        font-family: 'DM Mono', monospace;
+        font-size: 0.7rem;
+        letter-spacing: 0.06em;
+        padding: 0.25rem 0.75rem;
+        border-radius: 2rem;
+        background: rgba(255,255,255,0.06);
+        color: #c0c0d0;
+        border: 1px solid var(--border);
+        text-transform: uppercase;
+    }
+
+    .td-price {
+        text-align: right;
+        font-family: 'DM Mono', monospace;
+        font-weight: 400;
+        font-size: 0.95rem;
+        color: var(--text-price);
+        letter-spacing: -0.01em;
+    }
+
+    .td-description {
+        color: var(--text-muted);
+        font-size: 0.82rem;
+        max-width: 320px;
+        line-height: 1.5;
+    }
+</style>
+
+<div class="gadget-catalog-wrapper">
+    <div class="catalog-header">
+        <h2>Gadget Catalog</h2>
+        <span class="item-count">@Model.Count() items</span>
+    </div>
+
+    <div class="gadget-table-container">
+        <table class="gadget-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Brand</th>
+                    <th>Category</th>
+                    <th class="col-price">Price</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var g in Model)
+                {
+                    <tr>
+                        <td class="td-name">@g.Name</td>
+                        <td class="td-brand">@g.Brand</td>
+                        <td class="td-category"><span>@g.Category</span></td>
+                        <td class="td-price">@g.Price.ToString("c")</td>
+                        <td class="td-description">@g.Description</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

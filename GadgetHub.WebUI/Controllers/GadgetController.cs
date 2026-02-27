@@ -19,7 +19,7 @@ namespace GadgetHub.WebUI.Controllers
 
         public ViewResult List()
         {
-            return View(myrepository.Gadget);
+            return View(myrepository.Gadgets);
 
         }
     }

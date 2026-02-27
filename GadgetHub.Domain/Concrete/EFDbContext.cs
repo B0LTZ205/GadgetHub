@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GadgetHub.Domain.Entities;
 
-namespace GadgetHub.Domain.Abstract
+namespace GadgetHub.Domain.Concrete
 {
-    public interface IGadgetRepository
+    public class EFDbContext : DbContext
     {
-        IEnumerable<Gadget> Gadgets { get; }
+        public DbSet<Gadget> Gadgets { get; set; }
     }
 }

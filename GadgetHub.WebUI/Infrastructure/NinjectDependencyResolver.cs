@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using GadgetHub.Domain.Abstract;
 using GadgetHub.Domain.Entities;
 using Ninject.Planning.Targets;
+using GadgetHub.Domain.Concrete;
 
 namespace GadgetHub.WebUI.Infrastructure
 {
@@ -33,7 +34,7 @@ namespace GadgetHub.WebUI.Infrastructure
 
         private void AddBindings()
         {
-            Mock<IGadgetRepository> myMock = new Mock<IGadgetRepository>();
+/*            Mock<IGadgetRepository> myMock = new Mock<IGadgetRepository>();
             myMock.Setup(m => m.Gadget).Returns(new List<Gadgets>
             {
                 new Gadgets { GadgetId=1, Name="Smartwatch X1", Brand="Nova", Price=199.99m, Description="Fitness + notifications", Category="Wearables" },
@@ -41,7 +42,10 @@ namespace GadgetHub.WebUI.Infrastructure
                 new Gadgets { GadgetId=3, Name="Pocket Drone Mini", Brand="SkyBit", Price=89.99m, Description="Beginner-friendly drone", Category="Drones" },
                 new Gadgets { GadgetId=4, Name="4K Action Cam", Brand="GoPeak", Price=129.00m, Description="Waterproof action camera", Category="Cameras" }
             });
-            mykernel.Bind<IGadgetRepository>().ToConstant(myMock.Object);
+            mykernel.Bind<IGadgetRepository>().ToConstant(myMock.Object);*/
+
+            mykernel.Bind<IGadgetRepository>().To<EFGadgetRepository>();
+
         }
     }
 }
