@@ -1,7 +1,6 @@
-﻿@using GadgetHub.Domain.Entities;
-@model IEnumerable<Gadget>
+﻿@model GadgetHub.WebUI.Models.GadgetsListViewModel
 @{
-    ViewBag.Title = "List";
+    ViewBag.Title = "Gadgets";
 }
 
 <style>
@@ -145,12 +144,89 @@
         max-width: 320px;
         line-height: 1.5;
     }
+
+    /* ── Pagination ── */
+    .pagination-bar {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 1rem 1.4rem;
+        border-top: 1px solid var(--border);
+        background: rgba(255,255,255,0.01);
+    }
+
+        /* Override Bootstrap's .btn-group / .pagination defaults */
+        .pagination-bar .pagination {
+            display: flex;
+            gap: 0.35rem;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            border-radius: 0;
+        }
+
+            .pagination-bar .pagination > li > a,
+            .pagination-bar .pagination > li > span,
+            .pagination-bar a,
+            .pagination-bar span {
+                font-family: 'DM Mono', monospace;
+                font-size: 0.75rem;
+                font-weight: 400;
+                letter-spacing: 0.04em;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 2rem;
+                height: 2rem;
+                padding: 0 0.55rem;
+                border-radius: 6px;
+                border: 1px solid var(--border) !important;
+                color: var(--text-muted) !important;
+                background: transparent !important;
+                text-decoration: none;
+                transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+                cursor: pointer;
+                user-select: none;
+                line-height: 1;
+            }
+
+                .pagination-bar .pagination > li > a:hover,
+                .pagination-bar a:hover {
+                    background: var(--accent-dim) !important;
+                    color: var(--accent) !important;
+                    border-color: rgba(200, 241, 53, 0.3) !important;
+                }
+
+                /* Active / current page */
+                .pagination-bar .pagination > .active > a,
+                .pagination-bar .pagination > .active > span,
+                .pagination-bar a.active,
+                .pagination-bar span.current {
+                    background: var(--accent) !important;
+                    color: #0d0d0f !important;
+                    border-color: var(--accent) !important;
+                    font-weight: 600;
+                    pointer-events: none;
+                }
+
+                /* Disabled prev / next */
+                .pagination-bar .pagination > .disabled > a,
+                .pagination-bar .pagination > .disabled > span,
+                .pagination-bar a.disabled,
+                .pagination-bar span.disabled {
+                    opacity: 0.3;
+                    pointer-events: none;
+                    background: transparent !important;
+                    color: var(--text-muted) !important;
+                    border-color: var(--border) !important;
+                }
 </style>
 
 <div class="gadget-catalog-wrapper">
     <div class="catalog-header">
         <h2>Gadget Catalog</h2>
-        <span class="item-count">@Model.Count() items</span>
+        <span class="item-count">@Model.PagingInfo.TotalItems items</span>
     </div>
 
     <div class="gadget-table-container">
@@ -165,7 +241,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var g in Model)
+                @foreach (var g in Model.Gadgets)
                 {
                     <tr>
                         <td class="td-name">@g.Name</td>
@@ -177,5 +253,8 @@
                 }
             </tbody>
         </table>
+        <div class="pagination-bar">
+            @Html.PageLinks(Model.PagingInfo, x => Url.Action("List", new { page = x }))
+        </div>
     </div>
 </div>

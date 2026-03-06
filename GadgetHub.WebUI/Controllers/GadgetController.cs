@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Web;
 using System.Web.Mvc;
 using GadgetHub.Domain.Abstract;
+using GadgetHub.WebUI.Models;
 
 namespace GadgetHub.WebUI.Controllers
 {
@@ -17,10 +19,22 @@ namespace GadgetHub.WebUI.Controllers
             this.myrepository = productrepository;
         }
 
-        public ViewResult List()
+        public int pageSize = 4;
+        public ViewResult List(int page = 1)
         {
-            return View(myrepository.Gadgets);
+            GadgetsListViewModel model = new GadgetsListViewModel
+            {
+                Gadgets = myrepository.Gadgets.OrderBy(g => g.GadgetId).Skip((page - 1) * pageSize).Take(pageSize),
 
+                PagingInfo = new PagingInfo
+                {
+                    CurrentPage = page,
+                    ItemsPerPage = pageSize,
+                    TotalItems = myrepository.Gadgets.Count()
+                }
+
+            };
+            return View(model);
         }
     }
 }
