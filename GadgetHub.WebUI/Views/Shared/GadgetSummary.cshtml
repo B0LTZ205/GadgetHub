@@ -1,0 +1,17 @@
+﻿@model GadgetHub.Domain.Entities.Gadget
+
+<tr>
+    <td class="td-name">@Model.Name</td>
+    <td class="td-brand">@Model.Brand</td>
+    <td class="td-category"><span>@Model.Category</span></td>
+    <td class="td-price">@Model.Price.ToString("c")</td>
+    <td class="td-description">@Model.Description</td>
+    <td>
+        @using (Html.BeginForm("AddToCart", "Cart"))
+        {
+            @Html.HiddenFor(x => x.GadgetId)
+            @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
+            <input type="submit" class="btn btn-success" value="Add to cart" />
+        }
+    </td>
+</tr>

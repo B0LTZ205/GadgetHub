@@ -222,39 +222,27 @@
                     border-color: var(--border) !important;
                 }
 </style>
-
-<div class="gadget-catalog-wrapper">
-    <div class="catalog-header">
-        <h2>Gadget Catalog</h2>
-        <span class="item-count">@Model.PagingInfo.TotalItems items</span>
+<div class="gadget-table-container">
+    <table class="gadget-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Brand</th>
+                <th>Category</th>
+                <th class="col-price">Price</th>
+                <th>Description</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var g in Model.Gadgets)
+            {
+                @Html.Partial("GadgetSummary", g)
+            }
+        </tbody>
+    </table>
+    <div class="pagination-bar">
+        @Html.PageLinks(Model.PagingInfo, x => Url.Action("List", new { page = x, category = Model.CurrentCategory }))
     </div>
-
-    <div class="gadget-table-container">
-        <table class="gadget-table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Brand</th>
-                    <th>Category</th>
-                    <th class="col-price">Price</th>
-                    <th>Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var g in Model.Gadgets)
-                {
-                    <tr>
-                        <td class="td-name">@g.Name</td>
-                        <td class="td-brand">@g.Brand</td>
-                        <td class="td-category"><span>@g.Category</span></td>
-                        <td class="td-price">@g.Price.ToString("c")</td>
-                        <td class="td-description">@g.Description</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-        <div class="pagination-bar">
-            @Html.PageLinks(Model.PagingInfo, x => Url.Action("List", new { page = x }))
-        </div>
-    </div>
+</div>
 </div>

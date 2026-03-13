@@ -13,22 +13,42 @@ namespace GadgetHub.WebUI
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            // Define routes for different product categories
-            routes.MapRoute(
-                name: null,
-                url: "Page{page}",
-                defaults: new
-                {
-                    Controller = "Gadget",
-                    action = "List"
-                });
+            // Page 1
+            routes.MapRoute(null, "", new
+            {
+                controller = "Gadget",
+                action = "List",
+                category = (string)null,
+                page = 1
+            });
+
+            // Page 2 and more
+            routes.MapRoute(null, "Page{page}", new
+            {
+                controller = "Gadget",
+                action = "List",
+                category = (string)null,
+            },
+                new { page = @"\d+" });
 
 
-            // Define the default route for the application
-            routes.MapRoute(
-                name: "Default",
-                url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Gadget", action = "List", id = UrlParameter.Optional }
+            // Page 3
+            routes.MapRoute(null, "{category}", new
+            {
+                controller = "Gadget",
+                action = "List",
+                page = 1
+            });
+
+            routes.MapRoute(null, "{category}/Page{page}", new
+            {
+                controller = "Gadget",
+                action = "List"
+            },
+            new { page = @"\d+" });
+
+
+            routes.MapRoute(null, "{controller}/{action}"
             );
         }
     }
