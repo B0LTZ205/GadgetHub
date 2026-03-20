@@ -78,6 +78,7 @@
     <Compile Include="Concrete\EFGadgetRepository.cs" />
     <Compile Include="Entities\Cart.cs" />
     <Compile Include="Entities\Gadgets.cs" />
+    <Compile Include="Entities\ShippingDetails.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

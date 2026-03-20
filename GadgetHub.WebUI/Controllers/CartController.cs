@@ -17,7 +17,7 @@ namespace GadgetHub.WebUI.Controllers
         {
             repository = repo;
         }
-        private Cart GetCar()
+        private Cart cart()
         {
             Cart cart = (Cart)Session["Cart"];
 
@@ -30,33 +30,43 @@ namespace GadgetHub.WebUI.Controllers
 
         }
 
-        public RedirectToRouteResult AddToCart(int GadgetId, string returnUrl)
+        public RedirectToRouteResult AddToCart(Cart cart, int GadgetId, string returnUrl)
         {
             Gadget product = repository.Gadgets.FirstOrDefault(p => p.GadgetId == GadgetId);
 
             if (product != null)
             {
-                GetCar().AddItem(product, 1);
+                cart.AddItem(product, 1);
             }
             return RedirectToAction("Index", new { returnUrl });
         }
 
-        public RedirectToRouteResult RemoveFromCart(int GadgetId, string returnUrl)
+        public RedirectToRouteResult RemoveFromCart(Cart cart,int GadgetId, string returnUrl)
         {
             Gadget product = repository.Gadgets.FirstOrDefault(p => p.GadgetId == GadgetId);
 
             if (product != null)
             {
-                GetCar().RemoveLine(product);
+                cart.RemoveLine(product);
             }
 
             return RedirectToAction("Index", new { returnUrl });
 
         }
 
-        public ViewResult Index(string returnUrl)
+        public ViewResult Index(Cart cart, string returnUrl)
         {
-            return View(new CartIndexViewModel { Cart = GetCar(), ReturnUrl = returnUrl });
+            return View(new CartIndexViewModel { Cart = cart, ReturnUrl = returnUrl });
+        }
+
+        public PartialViewResult Summary(Cart cart)
+        {
+            return PartialView(cart);
+        }
+
+        public ViewResult Checkout()
+        {
+            return View(new ShippingDetails());
         }
     }
 }
