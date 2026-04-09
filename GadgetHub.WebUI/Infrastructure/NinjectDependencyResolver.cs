@@ -9,6 +9,7 @@ using GadgetHub.Domain.Abstract;
 using GadgetHub.Domain.Entities;
 using Ninject.Planning.Targets;
 using GadgetHub.Domain.Concrete;
+using System.Configuration;
 
 namespace GadgetHub.WebUI.Infrastructure
 {
@@ -45,6 +46,14 @@ namespace GadgetHub.WebUI.Infrastructure
             mykernel.Bind<IGadgetRepository>().ToConstant(myMock.Object);*/
 
             mykernel.Bind<IGadgetRepository>().To<EFGadgetRepository>();
+            EmailSettings emailSettings = new EmailSettings
+            {
+                WriteAsFile = bool.Parse
+                    (ConfigurationManager.AppSettings["Email.WriteAsFile"] ?? "false")
+            };
+            mykernel.Bind<IOrderProcessor>()
+                .To<EmailOrderProcessor>()
+                .WithConstructorArgument("settings", emailSettings);
 
         }
     }

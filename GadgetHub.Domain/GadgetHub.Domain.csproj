@@ -73,9 +73,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstract\IGadgetRepository.cs" />
+    <Compile Include="Abstract\IOrderProcessor.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Concrete\EFDbContext.cs" />
     <Compile Include="Concrete\EFGadgetRepository.cs" />
+    <Compile Include="Concrete\EmailOrderProcessor.cs" />
     <Compile Include="Entities\Cart.cs" />
     <Compile Include="Entities\Gadgets.cs" />
     <Compile Include="Entities\ShippingDetails.cs" />

@@ -1,69 +1,65 @@
-﻿
+﻿@model GadgetHub.Domain.Entities.ShippingDetails
 
-@model GadgetHub.Domain.Entities.ShippingDetails
-
-
-@{ ViewBag.Title = "SportStore: Checkout";}
-
-<h2> Checkout Now </h2>
-
-<p>
-    Please enter your details, and well ship your goods right away!
-</p>
-
-@using (Html.BeginForm())
-{
-    <h3>Ship to</h3>
-    <div class="form-group">
-        <label>Name:</label>
-        @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
-    </div>
-    <h3>Address</h3>
-
-    <div class="form-group">
-        <label>Line 1: </label>
-        @Html.TextBoxFor(x => x.Line1, new { @class = "form-control" })
-    </div>
-
-    <div class="form-group">
-        <label>Line 2: </label>
-        @Html.TextBoxFor(x => x.Line2, new { @class = "form-control" })
-    </div>
-
-    <div class="form-group">
-        <label>Line 3: </label>
-        @Html.TextBoxFor(x => x.Line3, new { @class = "form-control" })
-    </div>
-
-    <div class="form-group">
-        <label>City: </label>
-        @Html.TextBoxFor(x => x.City, new { @class = "form-control" })
-    </div>
-
-    <div class="form-group">
-        <label>State: </label>
-        @Html.TextBoxFor(x => x.State, new { @class = "form-control" })
-    </div>
-
-    <div class="form-group">
-        <label>Zip: </label>
-        @Html.TextBoxFor(x => x.Zip, new { @class = "form-control" })
-    </div>
-
-    <div class="form-group">
-        <label>Country: </label>
-        @Html.TextBoxFor(x => x.Country, new { @class = "form-control" })
-    </div>
-
-    <h3>Options</h3>
-    <div class="checkbox">
-        <label>
-            @Html.CheckBoxFor(x => x.GiftWrap)
-            Gift wrap these items
-        </label>
-    </div>
-
-    <div class="text-center">
-        <input class="btn btn-primary" type="submit" value="Complete order" />
-    </div>
+@{
+    ViewBag.Title = "SportStore: Checkout";
 }
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0 h4">Checkout Now</h2>
+                </div>
+
+                <div class="card-body p-4">
+                    <p class="text-muted mb-4">
+                        Please enter your details below, and we'll ship your goods right away!
+                    </p>
+
+                    @using (Html.BeginForm())
+                    {
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                        <h5 class="border-bottom pb-2 mb-3">Shipping Address</h5>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Name</label>
+                            @Html.TextBoxFor(x => x.Name, new { @class = "form-control", placeholder = "Full Name" })
+                            @Html.ValidationMessageFor(x => x.Name, "", new { @class = "text-danger" })
+                        </div>
+
+                        foreach (var property in ViewData.ModelMetadata.Properties)
+                        {
+                            if (property.PropertyName != "Name" && property.PropertyName != "GiftWrap")
+                            {
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">
+                                        @(property.DisplayName ?? property.PropertyName)
+                                    </label>
+                                    @Html.TextBox(property.PropertyName, null, new { @class = "form-control", placeholder = property.PropertyName })
+                                    @Html.ValidationMessage(property.PropertyName, "", new { @class = "text-danger" })
+                                </div>
+                            }
+                        }
+
+                        <h5 class="border-bottom pb-2 mt-4 mb-3">Options</h5>
+                        <div class="form-check mb-4">
+                            @Html.CheckBoxFor(x => x.GiftWrap, new { @class = "form-check-input", id = "giftwrap" })
+                            <label class="form-check-label" for="giftwrap">
+                                Gift wrap these items
+                            </label>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="bi bi-cart-check"></i> Complete Order
+                            </button>
+                            <a href="@Url.Action("Index", "Home")" class="btn btn-link text-decoration-none">Return to Store</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

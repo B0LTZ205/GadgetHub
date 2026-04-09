@@ -2,33 +2,60 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
     <link href="~/Content/bootstrap-theme.css" rel="stylesheet" />
-
     <title>@ViewBag.Title</title>
+
+    <style>
+        /* Modern styling for the Horizontal Nav */
+        #categories {
+            padding-top: 15px;
+            padding-bottom: 15px;
+            background-color: #f8f8f8;
+            border-bottom: 1px solid #e7e7e7;
+            margin-bottom: 20px;
+        }
+
+            /* Ensure the category buttons sit side-by-side */
+            #categories .btn {
+                display: inline-block;
+                width: auto;
+                margin-right: 5px;
+                margin-bottom: 5px;
+            }
+
+        /* Clean up the navbar summary spacing */
+        .navbar-text {
+            margin-right: 15px;
+        }
+    </style>
 </head>
 
 <body>
-    @* Nav Bar - displays 'SportsStore' Title *@
-    <div class="navbar navbar-inverse" role="navigation">
-        <a class="navbar-brand" href="#">Gadgets Store</a>
-        @Html.Action("Summary", "Cart")
+    <div class="navbar navbar-inverse navbar-static-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="@Url.Action("List", "Gadget")">Gadgets Store</a>
+            </div>
+            <div class="navbar-right">
+                @Html.Action("Summary", "Cart")
+            </div>
+        </div>
     </div>
 
-    <div class="row panel">
-        @* A panel to list categories *@
-        <div id="categories" class="col-xs-3">
-            @Html.Action("Menu", "Nav")
-        </div>
+    @* Full-width Horizontal Category Menu *@
+    <div id="categories" class="container-fluid text-center">
+        @Html.Action("Menu", "Nav")
+    </div>
 
-        @* A placeholder - <div> to display body*@
-        <div class="col-xs-8">
-            @RenderBody()
+    @* Main Body Content *@
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                @RenderBody()
+            </div>
         </div>
-
     </div>
 </body>
 </html>

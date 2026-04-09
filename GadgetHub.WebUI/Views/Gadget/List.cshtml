@@ -1,248 +1,82 @@
 ﻿@model GadgetHub.WebUI.Models.GadgetsListViewModel
+
 @{
+
     ViewBag.Title = "Gadgets";
+
 }
 
-<style>
-    @@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400&display=swap');
+<div class="container mt-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h3 class="mb-0 fw-bold text-dark">Product Catalog</h3>
+                    <p class="text-muted small mb-0">Showing @Model.PagingInfo.TotalItems gadgets available</p>
+                </div>
+                <div class="col-auto">
+                    @if (Model.CurrentCategory != null)
+                    {
+                        <span class="badge rounded-pill bg-info text-dark px-3">@Model.CurrentCategory</span>
+                    }
+                </div>
+            </div>
+        </div>
 
-    :root {
-        --bg: #0d0d0f;
-        --surface: #16161a;
-        --border: #2a2a30;
-        --accent: #c8f135;
-        --accent-dim: rgba(200, 241, 53, 0.08);
-        --text-primary: #f0f0ee;
-        --text-muted: #6b6b78;
-        --text-price: #c8f135;
-    }
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4">Name</th>
+                        <th>Brand</th>
+                        <th>Category</th>
+                        <th class="text-center">Price</th>
+                        <th class="w-25">Description</th>
+                        <th class="text-center pe-4">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var g in Model.Gadgets)
+                    {
+                        @Html.Partial("GadgetSummary", g)
+                    }
+                </tbody>
+            </table>
+        </div>
 
-    .gadget-catalog-wrapper {
-        font-family: 'Syne', sans-serif;
-        background: var(--bg);
-        min-height: 100vh;
-        padding: 3rem 2rem;
-    }
-
-    .catalog-header {
-        display: flex;
-        align-items: baseline;
-        gap: 1rem;
-        margin-bottom: 2.5rem;
-    }
-
-        .catalog-header h2 {
-            font-size: 2.4rem;
-            font-weight: 800;
-            color: var(--text-primary);
-            letter-spacing: -0.03em;
-            margin: 0;
-            line-height: 1;
-        }
-
-        .catalog-header .item-count {
-            font-family: 'DM Mono', monospace;
-            font-size: 0.8rem;
-            font-weight: 300;
-            color: var(--text-muted);
-            letter-spacing: 0.08em;
-            border: 1px solid var(--border);
-            padding: 0.2rem 0.6rem;
-            border-radius: 2rem;
-        }
-
-    .gadget-table-container {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 24px 64px rgba(0,0,0,0.5);
-    }
-
-    .gadget-table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-        .gadget-table thead tr {
-            border-bottom: 1px solid var(--border);
-            background: rgba(255,255,255,0.02);
-        }
-
-        .gadget-table thead th {
-            font-family: 'DM Mono', monospace;
-            font-size: 0.65rem;
-            font-weight: 400;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            padding: 1rem 1.4rem;
-            text-align: left;
-            white-space: nowrap;
-        }
-
-            .gadget-table thead th.col-price {
-                text-align: right;
-            }
-
-        .gadget-table tbody tr {
-            border-bottom: 1px solid rgba(255,255,255,0.04);
-            transition: background 0.15s ease;
-        }
-
-            .gadget-table tbody tr:last-child {
-                border-bottom: none;
-            }
-
-            .gadget-table tbody tr:hover {
-                background: var(--accent-dim);
-            }
-
-        .gadget-table tbody td {
-            padding: 1.1rem 1.4rem;
-            color: var(--text-primary);
-            font-size: 0.92rem;
-            vertical-align: middle;
-        }
-
-    .td-name {
-        font-weight: 700;
-        font-size: 0.95rem;
-        letter-spacing: -0.01em;
-    }
-
-    .td-brand {
-        font-size: 0.85rem;
-        color: #a0a0b0;
-    }
-
-    .td-category span {
-        display: inline-block;
-        font-family: 'DM Mono', monospace;
-        font-size: 0.7rem;
-        letter-spacing: 0.06em;
-        padding: 0.25rem 0.75rem;
-        border-radius: 2rem;
-        background: rgba(255,255,255,0.06);
-        color: #c0c0d0;
-        border: 1px solid var(--border);
-        text-transform: uppercase;
-    }
-
-    .td-price {
-        text-align: right;
-        font-family: 'DM Mono', monospace;
-        font-weight: 400;
-        font-size: 0.95rem;
-        color: var(--text-price);
-        letter-spacing: -0.01em;
-    }
-
-    .td-description {
-        color: var(--text-muted);
-        font-size: 0.82rem;
-        max-width: 320px;
-        line-height: 1.5;
-    }
-
-    /* ── Pagination ── */
-    .pagination-bar {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        gap: 0.35rem;
-        padding: 1rem 1.4rem;
-        border-top: 1px solid var(--border);
-        background: rgba(255,255,255,0.01);
-    }
-
-        /* Override Bootstrap's .btn-group / .pagination defaults */
-        .pagination-bar .pagination {
-            display: flex;
-            gap: 0.35rem;
-            margin: 0;
-            padding: 0;
-            list-style: none;
-            border-radius: 0;
-        }
-
-            .pagination-bar .pagination > li > a,
-            .pagination-bar .pagination > li > span,
-            .pagination-bar a,
-            .pagination-bar span {
-                font-family: 'DM Mono', monospace;
-                font-size: 0.75rem;
-                font-weight: 400;
-                letter-spacing: 0.04em;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                min-width: 2rem;
-                height: 2rem;
-                padding: 0 0.55rem;
-                border-radius: 6px;
-                border: 1px solid var(--border) !important;
-                color: var(--text-muted) !important;
-                background: transparent !important;
-                text-decoration: none;
-                transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-                cursor: pointer;
-                user-select: none;
-                line-height: 1;
-            }
-
-                .pagination-bar .pagination > li > a:hover,
-                .pagination-bar a:hover {
-                    background: var(--accent-dim) !important;
-                    color: var(--accent) !important;
-                    border-color: rgba(200, 241, 53, 0.3) !important;
-                }
-
-                /* Active / current page */
-                .pagination-bar .pagination > .active > a,
-                .pagination-bar .pagination > .active > span,
-                .pagination-bar a.active,
-                .pagination-bar span.current {
-                    background: var(--accent) !important;
-                    color: #0d0d0f !important;
-                    border-color: var(--accent) !important;
-                    font-weight: 600;
-                    pointer-events: none;
-                }
-
-                /* Disabled prev / next */
-                .pagination-bar .pagination > .disabled > a,
-                .pagination-bar .pagination > .disabled > span,
-                .pagination-bar a.disabled,
-                .pagination-bar span.disabled {
-                    opacity: 0.3;
-                    pointer-events: none;
-                    background: transparent !important;
-                    color: var(--text-muted) !important;
-                    border-color: var(--border) !important;
-                }
-</style>
-<div class="gadget-table-container">
-    <table class="gadget-table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Brand</th>
-                <th>Category</th>
-                <th class="col-price">Price</th>
-                <th>Description</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var g in Model.Gadgets)
-            {
-                @Html.Partial("GadgetSummary", g)
-            }
-        </tbody>
-    </table>
-    <div class="pagination-bar">
-        @Html.PageLinks(Model.PagingInfo, x => Url.Action("List", new { page = x, category = Model.CurrentCategory }))
+        <div class="card-footer bg-white py-3">
+            <div class="d-flex justify-content-center">
+                <nav>
+                    <div class="pagination-wrapper">
+                        @Html.PageLinks(Model.PagingInfo, x => Url.Action("List", new { page = x, category = Model.CurrentCategory }))
+                    </div>
+                </nav>
+            </div>
+        </div>
     </div>
 </div>
-</div>
+
+<style>
+    /* Styling the Custom PageLinks Helper Output */
+    .pagination-wrapper a {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        margin: 0 2px;
+        text-decoration: none;
+        background-color: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        color: #0d6efd;
+        transition: all 0.2s;
+    }
+
+        .pagination-wrapper a:hover {
+            background-color: #e9ecef;
+        }
+
+        .pagination-wrapper a.selected { /* Assuming your helper applies a 'selected' class */
+            background-color: #0d6efd;
+            color: white;
+            border-color: #0d6efd;
+        }
+</style>
