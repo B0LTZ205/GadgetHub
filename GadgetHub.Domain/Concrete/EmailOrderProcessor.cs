@@ -15,7 +15,7 @@ namespace GadgetHub.Domain.Concrete
         //Email settings
 
         public string MailToAddress = "orders@example.com";
-        public string MailFromAddress = "sportsstore@example.com";
+        public string MailFromAddress = "gadgetsstore@example.com";
         public bool UseSsl = true;
         public string Username = "MySmtpUsername";
         public string Password = "MySmtpPassword";
