@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using GadgetHub.Domain.Abstract;
+using GadgetHub.Domain.Concrete;
+using GadgetHub.Domain.Entities;
+using GadgetHub.WebUI.Infrastructure.Abstract;
+using GadgetHub.WebUI.Infrastructure.Concrete;
 using Moq;
 using Ninject;
-using System.Web.Mvc;
-using GadgetHub.Domain.Abstract;
-using GadgetHub.Domain.Entities;
 using Ninject.Planning.Targets;
-using GadgetHub.Domain.Concrete;
+using System;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
 
 namespace GadgetHub.WebUI.Infrastructure
 {
@@ -54,6 +56,9 @@ namespace GadgetHub.WebUI.Infrastructure
             mykernel.Bind<IOrderProcessor>()
                 .To<EmailOrderProcessor>()
                 .WithConstructorArgument("settings", emailSettings);
+
+            //Auth
+            mykernel.Bind<IAuthProvider>().To<FormsAuthProvider>();
 
         }
     }

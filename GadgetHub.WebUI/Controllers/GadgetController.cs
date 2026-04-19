@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Web;
 using System.Web.Mvc;
+using GadgetHub.Domain.Entities;
 using GadgetHub.Domain.Abstract;
 using GadgetHub.WebUI.Models;
 
@@ -36,6 +37,19 @@ namespace GadgetHub.WebUI.Controllers
 
             };
             return View(model);
+        }
+
+        public FileContentResult GetImage(int gadgetId)
+        {
+            Gadget prod = myrepository.Gadgets.FirstOrDefault(p => p.GadgetId == gadgetId);
+            if (prod != null)
+            {
+                return File(prod.ImageData, prod.ImageMimeType);
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }
